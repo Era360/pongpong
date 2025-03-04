@@ -59,19 +59,24 @@ impl MainState {
     fn new(ctx: &mut Context) -> GameResult<MainState> {
         let yanga_player_mesh = graphics::Mesh::new_rectangle(
             ctx,
-            graphics::DrawMode::stroke(1.0),
-            graphics::Rect::new(450.0, 450.0, 50.0, 50.0),
-            Color::new(50.0, 168.0, 82.0, 1.0),
-        )
-        .expect("failed to create yanga player");
+            graphics::DrawMode::fill(),
+            graphics::Rect::new(10.0, SCREEN_SIZE.1 / 2.0 - 10.0, 20.0, SCREEN_SIZE.1 / 4.0),
+            // green
+            Color::new(0.0, 1.0, 0.0, 1.0),
+        )?;
 
         let simba_player_mesh = graphics::Mesh::new_rectangle(
             ctx,
-            graphics::DrawMode::stroke(1.0),
-            graphics::Rect::new(300.0, 300.0, 50.0, 50.0),
-            Color::new(163.0, 8.0, 1.0, 1.0),
-        )
-        .expect("failed to create simba player");
+            graphics::DrawMode::fill(),
+            graphics::Rect::new(
+                SCREEN_SIZE.0 - 40.0,
+                SCREEN_SIZE.1 / 2.0 - 10.0,
+                20.0,
+                SCREEN_SIZE.1 / 4.0,
+            ),
+            //     red
+            Color::new(1.0, 0.0, 0.0, 1.0),
+        )?;
 
         Ok(MainState {
             yanga_rect: yanga_player_mesh,
@@ -105,6 +110,10 @@ impl event::EventHandler<ggez::GameError> for MainState {
     /// * `GameResult` - The result of the draw operation.
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
         let mut canvas = graphics::Canvas::from_frame(ctx, Color::WHITE);
+
+        // draw the rectangles on both ends of the screens
+        canvas.draw(&self.yanga_rect, graphics::DrawParam::default());
+        canvas.draw(&self.simba_rect, graphics::DrawParam::default());
 
         canvas.finish(ctx)?;
 
