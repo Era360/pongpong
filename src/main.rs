@@ -557,6 +557,26 @@ impl event::EventHandler<ggez::GameError> for GameState {
             self.countdown.draw(ctx, &mut canvas)?;
         }
 
+        // Draw paused text if the game is paused and countdown is not active
+        if self.game_paused && !self.countdown.active {
+            let paused_text = Text::new(
+                TextFragment::new("PAUSED") //TODO: maybe we add a nice pause icon?
+                    .color(Color::BLACK)
+                    .scale(graphics::PxScale::from(50.0)),
+            );
+
+            let text_dimensions = paused_text.dimensions(ctx).unwrap();
+            let paused_position = Vec2::new(
+                SCREEN_SIZE.0 / 2.0 - text_dimensions.w / 2.0,
+                SCREEN_SIZE.1 / 2.0 - text_dimensions.h / 2.0,
+            );
+
+            canvas.draw(
+                &paused_text,
+                graphics::DrawParam::from(paused_position).color(Color::BLACK),
+            );
+        }
+
         canvas.finish(ctx)?;
 
         Ok(())
